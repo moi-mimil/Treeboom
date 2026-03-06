@@ -1,129 +1,91 @@
 import pygame, sys, subprocess
 
-#mise en place du son pour l'entree du nom
+# Set up sound for name input
 pygame.mixer.init()
 sound = pygame.mixer.Sound("setting.mp3")
 with open("controls.txt", "r") as f:
     lines = f.readlines()
     mute_setting = lines[5].strip()
-sound.set_volume(int(mute_setting) ^ 1)
+sound.set_volume(int(mute_setting) ^ 1)  # invert mute setting
 
-
-#secure txt file
+# Secure text file
 filename = "controls.txt"
 
-#on reecr le fichier avec les valeurs par defaut
+# Rewrite the file with default values
 with open(filename, "w") as f:
     f.write("wasd or zqsd (0 is wasd 1 is zqsd):\n1\nname:\nplaceholder\nMute/Unmute (0 is unmute 1 is mute):\n0\npoints:\n0\n")
 
 if not pygame.mixer.get_init():
     pygame.mixer.init()
 
-
-
-
-
-
-
-
-
-# Initialisation de pygame
+# Pygame initialization
 pygame.init()
 
-# Paramètres de la fenêtre
-LARGEUR= 1280
-HAUTEUR = 800
-fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR))
-pygame.display.set_caption("L'aventure interactive")
+# Window settings
+WIDTH = 1280
+HEIGHT = 800
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Interactive Adventure")
 
 clock = pygame.time.Clock()
-# Police de texte
+
+# Text font
 font = pygame.font.Font("04b_25__.ttf", 30)
 
-# Définition des variables des couleurs à utiliser dans le programme
-BLEU = (116, 208, 241)
-NOIR = (0, 0, 0)
-BLANC = (255, 255, 255)
+# Color variables used in the program
+BLUE = (116, 208, 241)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
-# Charger une image et la redimensionner
+# Load and resize an image
 image1 = pygame.image.load("menu-img-2.png")
-image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
+image1 = pygame.transform.scale(image1, (WIDTH, HEIGHT))
 
-# Variables de jeu
+# Game variables
 input_active = False
-prenom_joueur = ""
+player_name = ""
 
-def afficher_texte(texte, x, y, couleur):
+def display_text(text, x, y, color):
     """
-    Cette fonction permet d'afficher du texte dans une fenêtre Pygame à partir d'une position donnée (x, y). Si une ligne de texte dépasse
-    la largeur de la fenêtre, elle est automatiquement coupée et continuée à la ligne suivante.
-
-    Paramètres :
-    -----------
-        texte(str) : Le texte à afficher.
-
-        x(int) : La position en pixels sur l'axe des abscisses (horizontal) où le texte commence à être affiché.
-
-        y(int) : La position en pixels sur l'axe des ordonnées (vertical) où le texte commence à être affiché.
-
-        couleur(tuple): Une couleur définie sous forme de tuple (R, G, B) pour la couleur du texte.
+    Displays text in a Pygame window starting at a given
+    position (x, y). If a line of text exceeds the window width, 
+    it is automatically wrapped to the next line.
     """
+    assert type(text) == str, "Parameter 'text' must be a string."
+    assert type(x) == int and type(y) == int, "Parameters 'x' and 'y' must be integers."
+    assert type(color) == tuple and len(color) == 3, "Parameter 'color' must be an RGB tuple."
 
-
-    assert type(texte) == str, "Le paramètre 'texte' doit être une chaîne de caractères."
-    assert type(x) == int and type(y) == int, "Les paramètres 'x' et 'y' doivent être des entiers."
-    assert type(couleur) == tuple and len(couleur) == 3, "Le paramètre 'couleur' doit être un tuple de trois entiers (R, G, B)."
-    mots = texte.split(' ')
-    ligne_actuelle = ''
+    words = text.split(' ')
+    current_line = ''
     y_offset = 0
 
-    for mot in mots:
-        # Vérifie si on peut ajouter le mot à la ligne actuelle
-        if font.size(ligne_actuelle + mot)[0] <= LARGEUR - x:
-            ligne_actuelle += mot + ' '
+    for word in words:
+        # check if the word fits on the current line
+        if font.size(current_line + word)[0] <= WIDTH - x:
+            current_line += word + ' '
         else:
-            # Dessine la ligne actuelle et réinitialise pour la nouvelle ligne
-            fenetre.blit(font.render(ligne_actuelle.strip(), True, couleur), (x, y + y_offset))
-            ligne_actuelle = mot + ' '
-            y_offset += font.get_height()  # Augmente l'offset pour la prochaine ligne
+            # draw the current line and start a new one
+            window.blit(font.render(current_line.strip(), True, color), (x, y + y_offset))
+            current_line = word + ' '
+            y_offset += font.get_height()
 
-    # Dessine la dernière ligne si elle n'est pas vide
-    if ligne_actuelle:
-        fenetre.blit(font.render(ligne_actuelle.strip(), True, couleur), (x, y + y_offset))
+    # draw the last line if it is not empty
+    if current_line:
+        window.blit(font.render(current_line.strip(), True, color), (x, y + y_offset))
 
-
-def input_text(x, y, largeur, hauteur, couleur_fond, couleur_texte):
+def input_text(x, y, width, height, bg_color, text_color):
     """
-    Cette fonction gère la saisie de texte par l'utilisateur dans une zone de texte définie dans une fenêtre Pygame.
-    L'utilisateur peut entrer du texte jusqu'à appuyer sur la touche "Entrée", moment auquel la saisie est terminée
-    et le texte saisi est retourné.
-
-    Paramètres :
-    -----------
-        x (int) : La position en pixels sur l'axe des abscisses (horizontal) où la zone de texte commence à être affichée.
-
-        y (int) : La position en pixels sur l'axe des ordonnées (vertical) où la zone de texte commence à être affichée.
-
-        largeur (int) : La largeur de la zone de texte en pixels.
-
-        hauteur (int) : La hauteur de la zone de texte en pixels.
-
-        couleur_fond (tuple) : La couleur de fond de la zone de texte, définie sous forme de tuple (R, G, B).
-
-        couleur_texte (tuple) : La couleur du texte dans la zone de texte, définie sous forme de tuple (R, G, B).
-
-    Returns :
-    -------
-        texte (str) : Le texte saisi par l'utilisateur.
+    Handles user text input inside a defined text box.
+    The user types until pressing "Enter", which ends the input.
     """
-    assert type(x) == int and type(y) == int, "Les paramètres 'x' et 'y' doivent être des entiers."
-    assert type(largeur) == int and type(hauteur) == int, "Les paramètres 'largeur' et 'hauteur' doivent être des entiers."
-    assert type(couleur_fond) == tuple and len(couleur_fond) == 3, "Le paramètre 'couleur_fond' doit être un tuple de trois entiers (R, G, B)."
-    assert type(couleur_texte) == tuple and len(couleur_texte) == 3, "Le paramètre 'couleur_texte' doit être un tuple de trois entiers (R, G, B)."
+    assert type(x) == int and type(y) == int, "Parameters 'x' and 'y' must be integers."
+    assert type(width) == int and type(height) == int, "Parameters 'width' and 'height' must be integers."
+    assert type(bg_color) == tuple and len(bg_color) == 3, "Parameter 'bg_color' must be an RGB tuple."
+    assert type(text_color) == tuple and len(text_color) == 3, "Parameter 'text_color' must be an RGB tuple."
 
     global input_active
     input_active = True
-    texte = ""
+    text = ""
 
     while input_active:
         for event in pygame.event.get():
@@ -133,87 +95,86 @@ def input_text(x, y, largeur, hauteur, couleur_fond, couleur_texte):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    input_active = False  # Désactive l'input
-                    return texte  # Retourne le texte saisi
+                    input_active = False
+                    return text
                 elif event.key == pygame.K_BACKSPACE:
-                    texte = texte[:-1]  # Supprime le dernier caractère
+                    text = text[:-1]
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
                 else:
-                    if len(texte) < 48 and event.unicode.isprintable():  # Limite la longueur du texte à 49 caractères
-                        texte += event.unicode  # Ajoute le caractère à la chaîne
+                    # limit text length to 48 characters
+                    if len(text) < 48 and event.unicode.isprintable():
+                        text += event.unicode
                         sound.play()
 
-        # Afficher la zone de texte
-        pygame.draw.rect(fenetre, couleur_fond, (x, y, largeur, hauteur))
+        # Draw the text box
+        pygame.draw.rect(window, bg_color, (x, y, width, height))
 
-        # Afficher le texte
-        texte_surface = font.render(texte + "_", True, couleur_texte)
-        fenetre.blit(texte_surface, (x + 10, y + 10))
+        # Display typed text
+        text_surface = font.render(text + "_", True, text_color)
+        window.blit(text_surface, (x + 10, y + 10))
 
-        pygame.display.flip()  # Met à jour l'affichage
+        pygame.display.flip()
 
-fin = False
+finished = False
 
-#pygame.key.set_repeat(300, 50)
+# Main game loop
+while not finished:
 
-
-# Boucle principale du jeu, tant que le jeu n'est pas fini on continue
-while not fin:
-
-    # Boucle de gestion des évènements dans la fenêtre
+    # Event handling
     for event in pygame.event.get():
 
-        # Si l'utilisateur appuie sur la croix en haut à droite, cela met fin au jeu et ferme pygame
+        # If user clicks close button, exit game
         if event.type == pygame.QUIT:
-            fin = True
+            finished = True
             pygame.quit()
             sys.exit()
 
-    # Remplir l'écran de bleu
-    fenetre.fill(BLEU)
+    # Fill the screen with blue
+    window.fill(BLUE)
 
-    # Afficher l'image à l'écran, le coin en haut à gauche à la coordonnée 0,0
-    fenetre.blit(image1, (0, 0))
+    # Display the image at (0,0)
+    window.blit(image1, (0, 0))
 
-    # Si le prénom du joueur n'a pas encore été saisi
-    if prenom_joueur == "":
-        # On demande et on recupère le prénom saisi par l'utilisateur
-        afficher_texte("Quel est", 300, 300, NOIR)
-        afficher_texte("ton nom ?", 300, 330, NOIR)
-        prenom_joueur = input_text(200, 500, 800, 50, BLANC, BLEU)
-        #verification du nom jade pour le troll
-        if "jade" in prenom_joueur:
+    # If the player name has not been entered
+    if player_name == "":
+        # Ask and get the player's name
+        display_text("What is", 275, 300, BLACK)
+        display_text("your name?", 275, 330, BLACK)
+        player_name = input_text(200, 500, 800, 50, WHITE, BLUE)
+
+        # Check for troll name "jade"
+        if "jade" in player_name:
             print(""" \033[31mTraceback (most recent call last):
 File "D:/treeboomPEAK WITH SAVE ONE/intro.py", line 165, in <name>
     jade
 pygame.error: user name is too short\033[0m""")
-            fin = True
+            finished = True
             pygame.quit()
             sys.exit()
 
-        elif prenom_joueur.strip() == "placeholder":
-            print("name reserved error, please choose another name")
-            prenom_joueur = ""
+        elif player_name.strip() == "placeholder":
+            print("Name reserved error, please choose another name")
+            player_name = ""
 
-        #si le nom est valide (pas jade) on l'enregistre dans le fichier txt
+        # If name is valid, save it to the txt file
         else:
-            if prenom_joueur != "":
+            if player_name != "":
                 filename = "controls.txt"
                 with open(filename, "r+") as f:
                     lines = f.readlines()
-                    lines[3] = prenom_joueur
-                    lines[3] += "\n"
+                    lines[3] = player_name + "\n"
 
                     f.seek(0)
                     f.writelines(lines)
                     f.truncate()
-                    subprocess.Popen([sys.executable, "treeboom-menu.py"])
-                    fin = True
 
-    # Mise à jour de l'affichage
+                    subprocess.Popen([sys.executable, "treeboom-menu.py"])
+                    finished = True
+
     pygame.display.flip()
     clock.tick(60)  # 60 FPS cap
+
 pygame.quit()
 sys.exit()
