@@ -1,0 +1,10 @@
+wasd or zqsd (0 is wasd 1 is zqsd):
+1
+name:
+halo
+Mute/Unmute (0 is unmute 1 is mute):
+0
+points: 
+7
+open intro (True/False):
+False
