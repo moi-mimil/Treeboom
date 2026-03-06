@@ -63,7 +63,13 @@ python treeboom.py
 
 <hr />
 
+<hr />
 <div align="center">
   <p><b>Join the industrial revolution.</b></p>
-  <p>Developed by <a href="https://github.com/moi-mimil">mimil</a>, <a href="https://github.com/nyarch-us3r">nyarch-us3r</a>, and <a href="https://github.com/oyachii">oyachii</a></p>
+  <p>
+    Developed by 
+    <a href="https://github.com/moi-mimil">mimil</a>, 
+    <a href="https://github.com/nyarch-us3r">nyarch-us3r</a>, and 
+    <a href="https://github.com/oyachii">oyachii</a>
+  </p>
 </div>
