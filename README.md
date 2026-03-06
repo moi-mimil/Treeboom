@@ -65,5 +65,5 @@ python treeboom.py
 
 <div align="center">
   <p><b>Join the industrial revolution.</b></p>
-  <p>Developed by <a href="https://github.com/moi-mimil">moi-mimil</a></p>
+  <p>Developed by <a href="https://github.com/moi-mimil">mimil</a>, <a href="Https://github.com/nyarch-us3r>nyarch-us3r</a>, and </p>
 </div>
