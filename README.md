@@ -52,14 +52,14 @@
 
 <hr />
 
-<pre>
+
 <h2>🚀 Quick Start</h2>
 # Install Pygame
 pip install pygame
 
 # Launch the destruction
 python treeboom.py
-</pre>
+
 
 <hr />
 <div align="center">
@@ -67,7 +67,7 @@ python treeboom.py
 </div>
 <hr />
 <div align="center">
-  <p><b>Join the industrial revolution.</b></p>
+  <p><b>Join the industrial revolution</b></p>
   <p>
     Developed by 
     <a href="https://github.com/moi-mimil">mimil</a>, 
