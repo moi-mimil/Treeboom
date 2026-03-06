@@ -52,14 +52,14 @@
 
 <hr />
 
-
+<pre>
 <h2>🚀 Quick Start</h2>
 # Install Pygame
 pip install pygame
 
 # Launch the destruction
 python treeboom.py
-
+</pre>
 
 <hr />
 <div align="center">
