@@ -52,8 +52,8 @@
 
 <hr />
 
-<h2>🚀 Quick Start</h2>
 <pre>
+<h2>🚀 Quick Start</h2>
 # Install Pygame
 pip install pygame
 
