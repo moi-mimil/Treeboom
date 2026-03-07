@@ -1,2 +1,3 @@
 Pour lancer le jeu
-ouvrir intro 
+
+ouvrir intro.py
