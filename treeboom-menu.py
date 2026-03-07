@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 
 # load the background image
 image1 = pygame.image.load("menu-img-2.png")
-image1 = pygame.transform.scale(image1, (WIDTH, HAUTEUR))
+image1 = pygame.transform.scale(image1, (WIDTH, HEIGHT))
 
 # clickable rectangle zones
 button1_rect = pygame.Rect(190, 310, 300, 80)  # "Play"
@@ -92,5 +92,6 @@ while running:
 
 
 pygame.quit()
+
 
 
