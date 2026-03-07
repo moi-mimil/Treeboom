@@ -6,15 +6,15 @@ pygame.font.init()
 font = pygame.font.SysFont("Tahoma", 45)
 
 # window settings
-LARGEUR = 1280
-HAUTEUR = 800
-fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR))
+WIDTH = 1280
+HEIGHT = 800
+window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("treeboom")
 clock = pygame.time.Clock()
 
 # load the background image
 image1 = pygame.image.load("menu-img-2.png")
-image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
+image1 = pygame.transform.scale(image1, (WIDTH, HAUTEUR))
 
 # clickable rectangle zones
 button1_rect = pygame.Rect(190, 310, 300, 80)  # "Play"
@@ -47,12 +47,12 @@ name_rect = name_text.get_rect(center=button4_rect.center)
 points_rect = points_text.get_rect(center=button5_rect.center )
 
 # Main loop
-fin = False
-while not fin:
+running = True
+while running:
     # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            fin = True
+            running = False
             pygame.quit()
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -77,14 +77,14 @@ while not fin:
                 print("you have", points, "points")
 
     # Display background image
-    fenetre.blit(image1, (0, 0))
+    window.blit(image1, (0, 0))
 
     # Display text in each button
-    fenetre.blit(play_text, play_rect)
-    fenetre.blit(options_text, options_rect)
-    fenetre.blit(exit_text, exit_rect)
-    fenetre.blit(name_text, name_rect)
-    fenetre.blit(points_text, points_rect)
+    window.blit(play_text, play_rect)
+    window.blit(options_text, options_rect)
+    window.blit(exit_text, exit_rect)
+    window.blit(name_text, name_rect)
+    window.blit(points_text, points_rect)
 
     # display update for each tick
     pygame.display.flip()
@@ -92,4 +92,5 @@ while not fin:
 
 
 pygame.quit()
+
 
