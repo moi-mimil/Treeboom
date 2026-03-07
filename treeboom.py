@@ -1,16 +1,46 @@
-import pygame, sys, math, subprocess, time
-from random import *
+import pygame
+import sys
+import math
+import subprocess
+import time
+import random
 
 
-# Initialize the mixer before loading sounds
+
+
+
+
+
+# initialize pygame
+pygame.init()
+score = 0
+
+#constants:
+# Constants
+CONTROL_FILE = "controls.txt"
+SOUND_GAME_OVER = "game-over.mp3"
+SOUND_HIT_ENEMY = "hit-enemy.mp3"
+FONT_FILE = "04b_25__.ttf"
+
+WIDTH, HEIGHT = 1280, 800
+PLAYER_WIDTH, PLAYER_HEIGHT = 40, 60
+PLAYER_SPEED = 5
+ball_speed = 12
+MAX_BALLS = 3
+MAX_AIM_DISTANCE = 40
+AIM_POINT_RADIUS = 8
+ENEMY_HIT_RADIUS = 30
+TREE_HIT_RADIUS = 80
+ 
+ # Initialize the mixer before loading sounds
 pygame.mixer.init()
-
-# loads the sound files
-game_over = pygame.mixer.Sound('game-over.mp3')
-hit_enemy = pygame.mixer.Sound('hit-enemy.mp3')
+ 
+ # loads the sound files
+game_over = pygame.mixer.Sound(SOUND_GAME_OVER)
+hit_enemy = pygame.mixer.Sound(SOUND_HIT_ENEMY)
 
 # read the mute setting and score from controls.txt
-with open("controls.txt", "r") as f:
+with open(CONTROL_FILE, "r") as f:
     lines = f.readlines()
     mute_setting = lines[5].strip()
     score_test = int(lines[7].strip())
@@ -19,13 +49,10 @@ with open("controls.txt", "r") as f:
 game_over.set_volume(int(mute_setting) ^ 1)
 hit_enemy.set_volume((int(mute_setting) ^ 1)*0.7)
 
-# initialize pygame
-pygame.init()
-score = 0
 
 # window settings
-LARGEUR, HAUTEUR = 1280, 800
-ecran = pygame.display.set_mode((LARGEUR, HAUTEUR))
+WIDTH, HEIGHT = 1280, 800
+ecran = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Déplacements et tir")
 
 # load and resize images
@@ -43,7 +70,7 @@ dead = pygame.image.load("dead-antimilo.png")
 # font settings
 font = pygame.font.Font("04b_25__.ttf", 30)
 
-def afficher_texte(texte, x, y, couleur):
+def display_text(text, x, y, color):
     """
     This function displays text in a Pygame window starting from a given position (x, y). If a line of text exceeds the window width, it is automatically truncated and continued on the next line.
 
@@ -60,26 +87,26 @@ def afficher_texte(texte, x, y, couleur):
     """
 
 
-    assert type(texte) == str, "Le paramètre 'texte' doit être une chaîne de caractères."
-    assert type(x) == int and type(y) == int, "Les paramètres 'x' et 'y' doivent être des entiers."
-    assert type(couleur) == tuple and len(couleur) == 3, "Le paramètre 'couleur' doit être un tuple de trois entiers (R, G, B)."
-    mots = texte.split(' ')
+    assert type(text) == str, "this function only accepts string as input for the 'text' parameter."
+    assert type(x) == int and type(y) == int, "this function only accepts integers for the 'x' and 'y' parameters."
+    assert type(color) == tuple and len(color) == 3, "this function only accepts a tuple of three integers for the 'color' parameter."
+    mots = text.split(' ')
     ligne_actuelle = ''
     y_offset = 0
 
     for mot in mots:
         # check if the current line plus the next word exceeds the window width
-        if font.size(ligne_actuelle + mot)[0] <= LARGEUR - x:
+        if font.size(ligne_actuelle + mot)[0] <= WIDTH - x:
             ligne_actuelle += mot + ' '
         else:
             # Draw the current line and reset for the new line
-            ecran.blit(font.render(ligne_actuelle.strip(), True, couleur), (x, y + y_offset))
+            ecran.blit(font.render(ligne_actuelle.strip(), True, color), (x, y + y_offset))
             ligne_actuelle = mot + ' '
             y_offset += font.get_height()  # Increase the offset for the next line
 
     # Draw the last line if it is not empty
     if ligne_actuelle:
-        ecran.blit(font.render(ligne_actuelle.strip(), True, couleur), (x, y + y_offset))
+        ecran.blit(font.render(ligne_actuelle.strip(), True, color), (x, y + y_offset))
 
 
 
@@ -89,8 +116,11 @@ co2 = 1
 ran = True # for enemy respawn
 
 # initial background
-background1 = pygame.image.load("background-grey0.png")
-current_back = background1
+background0 = pygame.image.load("background-grey0.png")
+background1 = pygame.image.load("background-grey1.png")
+background2 = pygame.image.load("background-grey2.png")
+background3 = pygame.image.load("background-grey3.png")
+current_back = background0
 
 
 
@@ -118,21 +148,20 @@ def enemy(j_x,j_y, c_x, c_y):
 
 
     """
-    assert (type(j_x) == int or type(j_x) == float) and (type(j_y) == int or type(j_y) == float), "Les paramètres de position du joueur doivent être des entiers ou des flottants."
-    assert (type(c_x) == int or type(c_x) == float) and (type(c_y) == int or type(c_y) == float), "Les paramètres de position de la balle doivent être des entiers ou des flottants."
-    
+    assert (type(j_x) == int or type(j_x) == float) and (type(j_y) == int or type(j_y) == float), "the parameters of the player's position must be integers or floats."
+    assert (type(c_x) == int or type(c_x) == float) and (type(c_y) == int or type(c_y) == float), "the parameters of the bullet's position must be integers or floats."
 
     # we use global variables to manage the state of the enemy and the player's score, as well as the respawn logic for both the enemy and the tree.
     global alive, e_x, e_y, score, current_back, ran
 
-    assert (type(e_x) == int or type(e_x) == float) and (type(e_y) == int or type(e_y) == float), "Les variables de position de l'enemy doivent être des entiers ou des flottants."
-    assert type(score) == int, "Le score doit être un entier."
-    assert type(alive) == bool, "La variable 'alive' doit être un booléen."
-    assert type(ran) == bool, "La variable 'ran' doit être un booléen."
+    assert (type(e_x) == int or type(e_x) == float) and (type(e_y) == int or type(e_y) == float), "the parameters of the enemy's position must be integers or floats."
+    assert type(score) == int, "the score must be an integer."
+    assert type(alive) == bool, "the 'alive' variable must be a boolean."
+    assert type(ran) == bool, "the 'ran' variable must be a boolean."
 
 
     # enemy behavior and collision detection
-    if alive == True:
+    if alive:
         # speed calculated based on the score (to increase difficulty as the player progresses)
         speed = score +1
         # calculate the direction vector from the enemy to the player
@@ -153,7 +182,7 @@ def enemy(j_x,j_y, c_x, c_y):
                 score += 1
                 alive = False
                 # prepare the respawn of the enemy by choosing a random position among four predefined positions and setting the respawn timer to prevent immediate respawn and potential freezing of the game.
-                temp = randint(0,3)
+                temp = random.randint(0,3)
                 if temp==0:
                     e_x, e_y = 550, 800
                 elif temp==1:
@@ -173,8 +202,8 @@ def enemy(j_x,j_y, c_x, c_y):
                 ecran.blit(dead, (0,0))
             quit_game(score, score_test)
 
-
-        dx, dy = dx / dist, dy / dist  # Normalising  the vector
+        if dist:
+            dx, dy = dx / dist, dy / dist  # Normalising  the vector
         # speed of the enemy in function of this vector
         e_x += dx * speed
         e_y += dy * speed
@@ -184,41 +213,37 @@ def enemy(j_x,j_y, c_x, c_y):
 
 
 # player variables
-j_w, j_h = 40, 60
+j_w, j_h = PLAYER_WIDTH, PLAYER_HEIGHT
 miku_img = pygame.transform.scale(miku_img, (j_w, j_h))# rezise the player image to fit the hitbox
-j_x, j_y = LARGEUR//2, HAUTEUR//2
-v_joueur = 5
-bord_arrondi = 100
+j_x, j_y = WIDTH//2, HEIGHT//2
+v_joueur = PLAYER_SPEED
 
 # pointer variables
 dist_max_point = 40
 rayon_point = 8
-coul_point = (255, 0, 0)
 
 # enemy variables
 anti = pygame.image.load("anti-milo.png")
 anti = pygame.transform.scale(anti, (80, 60))
-global e_y,e_x
 e_x =550
 e_y =800
 
 # ball variables
-balles = []
-v_balle = 12
+balls = []
 c_x = 0
 c_y = 0
 
 
-horloge = pygame.time.Clock()
+clock = pygame.time.Clock()
 
 # properly quit the game and return to the menu, while saving the score if it is higher than the previous score stored in controls.txt
-def quit_game(sc, sc_test):
-    assert type(sc) == int and type(sc_test) == int , "Les scores doivent être des entiers."
-    if sc > sc_test:
+def quit_game(score, previous_score):
+    assert type(score) == int and type(previous_score) == int , "The scores must be integers."
+    if score > previous_score:
         # updates the score in controls.txt if the current score is higher than the previous score
-        with open('controls.txt', "r+")as f:
+        with open(CONTROL_FILE, "r+")as f:
             lines = f.readlines()
-            lines[7] = str(sc) + "\n"
+            lines[7] = str(score) + "\n"
             f.seek(0)
             f.writelines(lines)
             f.truncate()
@@ -232,7 +257,7 @@ def quit_game(sc, sc_test):
 
 
 
-def creer_arbre(): # creation of the tree and random choice of its position among 6 predefined positions
+def create_tree(): # creation of the tree and random choice of its position among 6 predefined positions
     """
     this function creates a tree in the game and randomly chooses its position among six predefined positions.
     The background of the game is also updated based on the current CO2 level, which is a global variable that increases when the player successfully hits the tree with a bullet.
@@ -249,15 +274,15 @@ def creer_arbre(): # creation of the tree and random choice of its position amon
     assert type(co2) == int , "Le niveau de CO2 doit être un entier."
     # we change the background according to the co2 level
     if co2 >=32:
-        current_back = pygame.image.load("background-grey3.png")
+        current_back = background3
     elif co2 >= 22:
-        current_back = pygame.image.load("background-grey2.png")
+        current_back = background2
     elif co2 >= 12:
-        current_back = pygame.image.load("background-grey1.png")
+        current_back = background1
     # otherwise we keep the base background (without gray)
 
     # random choice of the tree's position among 6 positions
-    rd_tree = randint(1,6)
+    rd_tree = random.randint(1,6)
 
     if rd_tree == 1:
         pose = (900, 500)
@@ -280,18 +305,16 @@ def creer_arbre(): # creation of the tree and random choice of its position amon
     return pose  # we return the randomly chosen position of the tree for use in collision detection and drawing the tree on the screen
 
 # initialisation of the first tree's position
-t_x, t_y = creer_arbre()
+t_x, t_y = create_tree()
 
 
 
 # choice of the control mode (ZQSD or WASD) based on the settings stored in controls.txt, and management of the player's movement according to the chosen control mode.
-touches = pygame.key.get_pressed()
 with open("controls.txt", "r") as f:
     lines = f.readlines()
     control_mode = int(lines[1].strip())
 
 # respawn variables
-global alive, alive_t, enemy_respawn_time, tree_respawn_time, ran_t
 alive = True
 alive_t = True
 running = True
@@ -311,9 +334,9 @@ button_text_rect = return_text.get_rect(center=button_rect.center)
 while running:
     # MAIN LOOP -----------------------------------------------------------------------------------------------------------------
 
-    for ev in pygame.event.get():
-        if ev.type == pygame.MOUSEBUTTONDOWN:
-            if button_rect.collidepoint(ev.pos):
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if button_rect.collidepoint(event.pos):
                 quit_game(score, score_test)
         # creation of a vector from the center of the player to the mouse position to determine the direction of the shot
         s_x, s_y = pygame.mouse.get_pos()
@@ -326,25 +349,25 @@ while running:
 
         # the orientation of the aiming reticle (damazon)
         if angle >= 45 and angle < 135:
-            dir = "Down"
+            # the reticle points downwards
             damazon = damazon_down
         elif angle >= 135 or angle < -135:
-            dir = "Left"
+            # the reticle points to the left
             damazon = damazon_left
         elif angle >= -135 and angle < -45:
-            dir = "Up"
+            # the reticle points upwards
             damazon = damazon_up
         elif angle >= -45 and angle < 45:
-            dir = "Right"
+            # the reticle points to the right
             damazon = damazon_right
 
 
-        if alive == False and not ran:
+        if not alive and not ran:
             ran = True
-            enemy_respawn_time = time.time() + randint(1, 7)  #  arbitrary respawn time for the enemy
-        if alive_t == False and not ran_t:
+            enemy_respawn_time = time.time() + random.randint(1, 7)  #  arbitrary respawn time for the enemy
+        if not alive_t and not ran_t:
             ran_t = True
-            tree_respawn_time = time.time() + randint(0, 3)  #  arbitrary respawn time for the tree
+            tree_respawn_time = time.time() + random.randint(0, 3)  #  arbitrary respawn time for the tree
 
         # we check if the respawn timers for the enemy and the tree have elapsed, and if so, we set them to alive again and call the enemy function to respawn the enemy at a new position, and we call the creer_arbre function to respawn the tree at a new position.
         if ran and not alive and time.time() >= enemy_respawn_time:
@@ -352,20 +375,20 @@ while running:
 
             enemy(j_x , j_y, c_x, c_y)
 
-        if ran and not alive_t and time.time() >= tree_respawn_time:
+        if ran_t and not alive_t and time.time() >= tree_respawn_time:
             alive_t = True
-            t_x, t_y = creer_arbre()
+            t_x, t_y = create_tree()
 
         # kill the player if they touch the borders/water
-        if j_x < 68 or j_x > LARGEUR - 68 or j_y > HAUTEUR - 115 or j_y < 68:
+        if j_x < 68 or j_x > WIDTH - 68 or j_y > HEIGHT - 115 or j_y < 68:
             quit_game(score, score_test)
 
-        if ev.type == pygame.QUIT:
+        if event.type == pygame.QUIT:
             quit_game(score, score_test)
-        if ev.type == pygame.MOUSEBUTTONDOWN and ev.button == 1 and dist !=0 and len(balles) < 3:
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and dist !=0 and len(balls) < 3:
             dir_x /= dist
             dir_y /= dist
-            balles.append([c_x, c_y, dir_x, dir_y])
+            balls.append([c_x, c_y, dir_x, dir_y])
 
 
     # player movement management according to the chosen control mode (ZQSD or WASD)
@@ -386,20 +409,20 @@ while running:
 
     j_x += dx * v_joueur
     j_y += dy * v_joueur
-    j_x = max(0, min(LARGEUR - j_w, j_x))
-    j_y = max(0, min(HAUTEUR - j_h, j_y))
+    j_x = max(0, min(WIDTH - j_w, j_x))
+    j_y = max(0, min(HEIGHT - j_h, j_y))
 
 
 
     # update the positions of the bullets and remove those that go out of the screen boundaries, while ensuring that the player can only have a maximum of 3 bullets on the screen at a time.
     nouvelles_balles = []
-    for bx, by, dx, dy in balles:
-        bx += dx * v_balle
-        by += dy * v_balle
-        if 0 < bx < LARGEUR and 0 < by < HAUTEUR:
+    for bx, by, dx, dy in balls:
+        bx += dx * ball_speed
+        by += dy * ball_speed
+        if 0 < bx < WIDTH and 0 < by < HEIGHT:
             nouvelles_balles.append([bx, by, dx, dy])
 
-    balles = nouvelles_balles
+    balls = nouvelles_balles
 
     ecran.blit(current_back, (0, 0)) # draw the current background based on the CO2 level
     # tree redimension and hitbox calculation
@@ -452,19 +475,19 @@ while running:
 
 
     # show the bullets on the screen
-    for bx, by, _, _ in balles:
+    for bx, by, _, _ in balls:
         ecran.blit(damazon, (int(bx), int(by)))
 
     # text display for score, number of bullets, and CO2 level
 
-    afficher_texte( "score :", 150, 0, (255, 255, 255))
-    afficher_texte( "cartons :", 550, 0, (255, 255, 255))
-    afficher_texte( "co2 level:", 910, 750, (255, 255, 255))
+    display_text( "score :", 150, 0, (255, 255, 255))
+    display_text( "cartons :", 550, 0, (255, 255, 255))
+    display_text( "co2 level:", 910, 750, (255, 255, 255))
 
 
-    afficher_texte(str(co2), 1090, 750, (255, 255, 255))
-    afficher_texte( str(score), 260, 0, (255, 255, 255))
-    afficher_texte( str(3-len(nouvelles_balles))+ " /3", 660, 0, (255, 255, 255))
+    display_text(str(co2), 1090, 750, (255, 255, 255))
+    display_text( str(score), 260, 0, (255, 255, 255))
+    display_text( str(3-len(nouvelles_balles))+ " /3", 660, 0, (255, 255, 255))
 
     # button to return to the menu
     ecran.blit(return_text, button_text_rect)
@@ -472,7 +495,7 @@ while running:
     # screen update
     pygame.display.flip()
 
-    horloge.tick(60)# END OF MAIN LOOP----------------------------------------------------------------------------------
+    clock.tick(60)# END OF MAIN LOOP----------------------------------------------------------------------------------
 
 
 pygame.quit()
