@@ -2,7 +2,7 @@ import pygame
 import sys
 import subprocess
 
-# initialising pygame
+# initializing pygame
 pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
@@ -131,3 +131,4 @@ while running:
 
 
 pygame.quit()
+
