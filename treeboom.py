@@ -408,7 +408,7 @@ while running:
     t_c_y = t_y + t_h / 2
 
 
-    # detection de collision avec un arbre par les balles
+    # tree collision detection with bullets
     for bx, by, _, _ in nouvelles_balles:
         dist_tree = math.hypot(bx - t_c_x, by - t_c_y)
         if dist_tree < 80:
@@ -416,25 +416,25 @@ while running:
                 co2 += 1
 
 
-            # on prepare le respawn de l'arbre pour pas freeze le pc
+            # we prepare the respawn of the tree
             alive_t = False
             ran_t= False 
             break
 
-    # Affichage de l'arbre s'il est vivant
+    # display the tree on the screen if it is alive
     if alive_t:
         ecran.blit(smol_tree, (t_x, t_y))
 
 
 
-    # on call enemy pour la premiere fois
+    # we call the enemy once at the beginning of the game to initialize its position and behavior
     enemy(j_x , j_y, c_x, c_y)
 
 
-    # Joueur
+    # player display
     ecran.blit(miku_img, (int(j_x), int(j_y)))
 
-    # Point rouge (viseur attaché au joueur, qui a ete remplacé par l'image damazon)
+    # aiming reticle (damazon) display, which follows the mouse position while maintaining a maximum distance from the center of the player
     s_x, s_y = pygame.mouse.get_pos()
     c_x = j_x + j_w / 2
     c_y = j_y + j_h / 2
@@ -451,11 +451,11 @@ while running:
 
 
 
-    # Dessiner les balles
+    # show the bullets on the screen
     for bx, by, _, _ in balles:
         ecran.blit(damazon, (int(bx), int(by)))
 
-    # afficher les textes
+    # text display for score, number of bullets, and CO2 level
 
     afficher_texte( "score :", 150, 0, (255, 255, 255))
     afficher_texte( "cartons :", 550, 0, (255, 255, 255))
@@ -466,13 +466,13 @@ while running:
     afficher_texte( str(score), 260, 0, (255, 255, 255))
     afficher_texte( str(3-len(nouvelles_balles))+ " /3", 660, 0, (255, 255, 255))
 
-    # bouton retour menu
+    # button to return to the menu
     ecran.blit(return_text, button_text_rect)
 
-    # Actualisation de l'écran
+    # screen update
     pygame.display.flip()
 
-    horloge.tick(60)# FIN DE WHILE----------------------------------------------------------------------------------
+    horloge.tick(60)# END OF MAIN LOOP----------------------------------------------------------------------------------
 
 
 pygame.quit()
