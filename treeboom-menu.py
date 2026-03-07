@@ -1,7 +1,7 @@
 import pygame, sys, subprocess
 
 
-# pygame initialisation
+# pygame initialization
 pygame.font.init()
 font = pygame.font.SysFont("Tahoma", 45)
 
@@ -92,6 +92,7 @@ while running:
 
 
 pygame.quit()
+
 
 
 
