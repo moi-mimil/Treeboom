@@ -1,30 +1,33 @@
-import pygame, sys, subprocess
+import pygame
+import sys
+import subprocess
 
-# Initialisation de pygame
+# initialising pygame
+pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Tahoma", 45)
 pygame.mixer.init()
 
-#mise en place du son pour le click
+# Set up sound for click
 click = pygame.mixer.Sound("setting.mp3")
-#charger le mute setting
+# load the mute setting from the text file
 with open("controls.txt", "r") as f:
     lines = f.readlines()
     mute_setting = lines[5].strip()
 click.set_volume(int(mute_setting) ^ 1)
 
-# Paramètres de la fenêtre
-LARGEUR = 1280
-HAUTEUR = 800
-fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR))
+# window settings
+WIDTH = 1280
+HEIGHT = 800
+fenetre = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("treeboom")
 
-# Charger une image et la redimensionner
+# load and resize the background image
 image1 = pygame.image.load("options-menu-tryout.png")
-image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
+image1 = pygame.transform.scale(image1, (WIDTH, HEIGHT))
 
-# Définir les positions et l'état du toggle button
+# toggle button settings
 toggle_x = 265
 toggle_y = 160
 toggle_state = True
@@ -33,24 +36,23 @@ green = (0,255,0)
 red = (255,0,0)
 color = 0
 
-#bouton mute unmute
+# mute/unmute button settings
 (mx, my) = pygame.mouse.get_pos()
 button_1 = pygame.Rect(500, 100, 300, 120)  # Toggle button
 mute_text = font.render("Mute / Unmute", True, (0, 0, 0))
 mute_rect = mute_text.get_rect(midtop=(button_1.centerx, button_1.top))
 
-#bouton return menu
+# return menu button settings
 button_rect = pygame.Rect(900, 100, 150, 20)
 return_text = font.render("Return Menu", True, (0, 0, 0))
 button_text_rect = return_text.get_rect(center=button_rect.center)
 
-global filename
 filename = "controls.txt"
 
-#boucle principale
+# Main loop
 running = True
 while running:
-    # Gestion des événements
+    # event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             subprocess.Popen([sys.executable, "treeboom-menu.py"])
@@ -58,11 +60,11 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             (mx, my) = pygame.mouse.get_pos()
 
-            # Vérifier si le toggle button a été cliqué en cliquant dans le cercle
+            # check if the toggle button was clicked
             if (mx - toggle_x)**2 + (my - toggle_y)**2 <= radius**2:
                 toggle_state = not toggle_state
 
-                # Reécrire le fichier texte avec la nouvelle valeur du toggle
+                # rewrite the text file with the new value of the toggle state
                 with open(filename, "r+") as f:
                     lines = f.readlines()
                     if lines[1].strip() == "0":
@@ -75,21 +77,20 @@ while running:
                     f.truncate()
                 click.play()
 
-            # Vérifier si le bouton return menu a été cliqué
+            # check if the return menu button was clicked
             elif button_rect.collidepoint(event.pos):
                 click.play()
                 subprocess.Popen([sys.executable, "treeboom-menu.py"])
                 running = False
 
-            # Vérifier si le bouton mute/unmute a été cliqué
+            # check if the mute/unmute button was clicked
             elif button_1.collidepoint(event.pos):
-                #print(mute_setting, type(mute_setting))    pour debugger
 
-                # Reécrire le fichier texte avec la nouvelle valeur du mute setting
+                # rewrite the text file with the new value of the mute setting
                 with open(filename, "r+") as f:
                     lines = f.readlines()
 
-                    #inverser la valeur du mute setting
+                    #invert the value of the mute setting
                     if lines[5].strip() == "0":
                         lines[5] = "1\n"
                         mute_setting = "1"
@@ -105,26 +106,26 @@ while running:
 
 
 
-        # Quitter la boucle si la fenêtre est fermée
+        # quit the game if the user clicks the close button
         if event.type == pygame.QUIT:
             running = False
-    # Remplir l'écran avec l'image de fond
+    # fill the background with the image
     fenetre.blit(image1, (0, 0))
 
 
-    # Dessiner le toggle button avec la couleur appropriée, vert pour activé, rouge pour désactivé
+    # draw the toggle button with the appropriate color
 
     pygame.draw.circle(fenetre, (toggle_state*255, abs(1-toggle_state)*255, 0), (toggle_x, toggle_y), radius)
 
-    # Dessiner le bouton mute/unmute avec la couleur appropriée
+    # draw the mute/unmute button with the appropriate color
     mute_setting = int(mute_setting)
     pygame.draw.circle(fenetre, (mute_setting*255, abs(1-mute_setting)*255, 0), (640, 180), 20)
 
-    # Afficher les textes des boutons
+    # display the button texts
     fenetre.blit(mute_text, mute_rect)
     fenetre.blit(return_text, button_text_rect)
 
-    # Mettre à jour l'affichage
+    # update the display
     pygame.display.flip()
     clock.tick(60)
 
