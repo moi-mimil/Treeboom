@@ -18,8 +18,8 @@ score = 0
 #constants:
 # Constants
 CONTROL_FILE = "controls.txt"
-SOUND_GAME_OVER = "game-over.mp3"
-SOUND_HIT_ENEMY = "hit-enemy.mp3"
+SOUND_GAME_OVER = "assets/sounds/game-over.mp3"
+SOUND_HIT_ENEMY = "assets/sounds/hit-enemy.mp3"
 FONT_FILE = "04b_25__.ttf"
 
 WIDTH, HEIGHT = 1280, 800
@@ -499,3 +499,4 @@ while running:
 
 
 pygame.quit()
+
