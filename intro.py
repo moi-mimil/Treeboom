@@ -2,7 +2,7 @@ import pygame, sys, subprocess
 
 # Set up sound for name input
 pygame.mixer.init()
-sound = pygame.mixer.Sound("setting.mp3")
+sound = pygame.mixer.Sound("assets/sounds/setting.mp3")
 with open("controls.txt", "r") as f:
     lines = f.readlines()
     mute_setting = lines[5].strip()
