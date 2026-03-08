@@ -10,7 +10,7 @@ font = pygame.font.SysFont("Tahoma", 45)
 pygame.mixer.init()
 
 # Set up sound for click
-click = pygame.mixer.Sound("setting.mp3")
+click = pygame.mixer.Sound("assets/sounds/setting.mp3")
 # load the mute setting from the text file
 with open("controls.txt", "r") as f:
     lines = f.readlines()
@@ -131,4 +131,5 @@ while running:
 
 
 pygame.quit()
+
 
