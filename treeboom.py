@@ -56,16 +56,16 @@ ecran = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Déplacements et tir")
 
 # load and resize images
-miku_img = pygame.image.load("miku1-no-w.png")
-smol_tree = pygame.image.load("smol-tree.png")
-big_tree = pygame.image.load("big-tree.png")
-mid_tree = pygame.image.load("mid-tree.png")
-damazon_down = pygame.image.load("damazon-down.png")
-damazon_up = pygame.image.load("damazon-up.png")
-damazon_right = pygame.image.load("damazon-right.png")
-damazon_left = pygame.image.load("damazon-left.png")
+miku_img = pygame.image.load("/assets/images/miku1-no-w.png")
+smol_tree = pygame.image.load("/assets/images/smol-tree.png")
+big_tree = pygame.image.load("/assets/images/big-tree.png")
+mid_tree = pygame.image.load("/assets/images/mid-tree.png")
+damazon_down = pygame.image.load("/assets/images/damazon-down.png")
+damazon_up = pygame.image.load("/assets/images/damazon-up.png")
+damazon_right = pygame.image.load("/assets/images/damazon-right.png")
+damazon_left = pygame.image.load("/assets/images/damazon-left.png")
 damazon = damazon_down
-dead = pygame.image.load("dead-antimilo.png")
+dead = pygame.image.load("/assets/images/dead-antimilo.png")
 
 # font settings
 font = pygame.font.Font("04b_25__.ttf", 30)
@@ -116,10 +116,10 @@ co2 = 1
 ran = True # for enemy respawn
 
 # initial background
-background0 = pygame.image.load("background-grey0.png")
-background1 = pygame.image.load("background-grey1.png")
-background2 = pygame.image.load("background-grey2.png")
-background3 = pygame.image.load("background-grey3.png")
+background0 = pygame.image.load("/assets/images/background-grey0.png")
+background1 = pygame.image.load("/assets/images/background-grey1.png")
+background2 = pygame.image.load("/assets/images/background-grey2.png")
+background3 = pygame.image.load("/assets/images/background-grey3.png")
 current_back = background0
 
 
@@ -223,7 +223,7 @@ dist_max_point = 40
 rayon_point = 8
 
 # enemy variables
-anti = pygame.image.load("anti-milo.png")
+anti = pygame.image.load("/assets/images/anti-milo.png")
 anti = pygame.transform.scale(anti, (80, 60))
 e_x =550
 e_y =800
@@ -499,4 +499,5 @@ while running:
 
 
 pygame.quit()
+
 
