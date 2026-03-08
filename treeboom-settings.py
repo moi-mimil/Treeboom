@@ -24,7 +24,7 @@ fenetre = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("treeboom")
 
 # load and resize the background image
-image1 = pygame.image.load("options-menu-tryout.png")
+image1 = pygame.image.load("/assets/images/options-menu-tryout.png")
 image1 = pygame.transform.scale(image1, (WIDTH, HEIGHT))
 
 # toggle button settings
@@ -131,5 +131,6 @@ while running:
 
 
 pygame.quit()
+
 
 
