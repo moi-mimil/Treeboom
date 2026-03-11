@@ -4,6 +4,28 @@
   <p><i>The world is too green. It's time to fix that.</i></p>
 </div>
 
+
+<h3>📦 Requirements</h3>
+<p>
+  To run <b>Treeboom</b>, you <i>need</i>:
+</p>
+
+<ul>
+  <li><b>Python 3.9+</b></li>
+  <li><b>Pygame 2.0+</b></li>
+</ul>
+
+<p>
+  The following modules are included with Python and require <b><i>no installation</i></b>:
+  <code>sys</code>, <code>math</code>, <code>subprocess</code>, <code>time</code>, <code>random</code>.
+</p>
+
+<p><b>Install the required dependency:</b></p>
+
+<pre>
+pip install "pygame>=2.0"
+</pre>
+
 <hr />
 
 <h2>📉 Mission Objective</h2>
