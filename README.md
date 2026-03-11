@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/moi-mimil/Treeboom/main/assets/images/miku1-no-w.png" width="80" height="120" />
+  <img src="https://github.com/moi-mimil/Treeboom/blob/main/assets/images/menu-img-2.png?raw=true" width="400" height="600" />
   <h1>TREEBOOM</h1>
   <p><i>The world is too green. It's time to fix that.</i></p>
 </div>
