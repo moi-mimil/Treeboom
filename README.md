@@ -83,5 +83,21 @@ Or download directly as a ZIP:
 
 <div align="center">
   <p><b>Destroy nature. Embrace chaos. Join the industrial revolution.</b></p>
-  <p>Developed by <a href="https://github.com/moi-mimil">mimil</a>, <a href="https://github.com/nyarch-us3r">nyarch-us3r</a>, and <a href="https://github.com/oyachii">oyachii</a></p>
+  
+  <!-- Avatars -->
+  <a href="https://github.com/moi-mimil">
+    <img src="https://avatars.githubusercontent.com/u/175439175?s=100" width="100" height="100" alt="mimil">
+  </a>
+  <a href="https://github.com/nyarch-us3r">
+    <img src="https://avatars.githubusercontent.com/u/233105423?s=100" width="100" height="100" alt="nyarch-us3r">
+  </a>
+  <a href="https://github.com/oyachii">
+    <img src="https://avatars.githubusercontent.com/u/243230714?s=100" width="100" height="100" alt="oyachii">
+  </a>
+  
+  <p>Developed by 
+    <a href="https://github.com/moi-mimil">mimil</a>, 
+    <a href="https://github.com/nyarch-us3r">nyarch-us3r</a>, and 
+    <a href="https://github.com/oyachii">oyachii</a>
+  </p>
 </div>
