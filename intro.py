@@ -1,4 +1,6 @@
-import pygame, sys, subprocess
+import pygame
+import sys
+import subprocess
 
 # Set up sound for name input
 pygame.mixer.init()
