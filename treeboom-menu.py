@@ -1,4 +1,6 @@
-import pygame, sys, subprocess
+import pygame
+import sys
+import subprocess
 
 
 # pygame initialization
@@ -92,6 +94,7 @@ while running:
 
 
 pygame.quit()
+
 
 
 
