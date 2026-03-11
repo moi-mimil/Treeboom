@@ -4,6 +4,10 @@
   <p><i>The world is too green. It's time to fix that.</i></p>
 </div>
 
+<div>
+  
+</div>
+
 
 <h3>📦 Requirements</h3>
 <p>
@@ -85,7 +89,9 @@ python treeboom.py
 
 <hr />
 <div align="center">
-  <a href="https://github.com/moi-mimil/Treeboom/archive/refs/heads/main.zip">DOWNLOAD HERE</a>
+  <h1>
+    <a href="https://github.com/moi-mimil/Treeboom/archive/refs/heads/main.zip">DOWNLOAD HERE</a>
+  </h1>
 </div>
 <hr />
 <div align="center">
