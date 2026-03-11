@@ -5,7 +5,7 @@
 </div>
 
 <div>
-  
+  <a href="https://github.com/moi-mimil/Treeboom/tree/main?tab=readme-ov-file#----download-here--">DOWNLOAD</a>
 </div>
 
 
@@ -59,7 +59,7 @@
 
 <div align="center">
   <h1>
-    DOWNLOAD HERE
+    DOWNLOAD INSTRUCTIONS
   </h1>
 </div>
 <div>
