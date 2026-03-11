@@ -9,27 +9,6 @@
 </div>
 
 
-<h3>📦 Requirements</h3>
-<p>
-  To run <b>Treeboom</b>, you <i>need</i>:
-</p>
-
-<ul>
-  <li><b>Python 3.9+</b></li>
-  <li><b>Pygame 2.0+</b></li>
-</ul>
-
-<p>
-  The following modules are included with Python and require <b><i>no installation</i></b>:
-  <code>sys</code>, <code>math</code>, <code>subprocess</code>, <code>time</code>, <code>random</code>.
-</p>
-
-<p><b>Install the required dependency:</b></p>
-
-<pre>
-pip install "pygame>=2.0"
-</pre>
-
 <hr />
 
 <h2>📉 Mission Objective</h2>
@@ -78,20 +57,35 @@ pip install "pygame>=2.0"
 
 <hr />
 
-<pre>
-<h2>🚀 Quick Start</h2>
-# Install Pygame
-pip install pygame
-
-# Launch the destruction
-python treeboom.py
-</pre>
-
-<hr />
 <div align="center">
   <h1>
-    <a href="https://github.com/moi-mimil/Treeboom/archive/refs/heads/main.zip">DOWNLOAD HERE</a>
+    DOWNLOAD HERE
   </h1>
+</div>
+<div>
+  <h3>📦 Requirements</h3>
+  <p>
+    To run <b>Treeboom</b>, you <i>need</i>:
+  </p>
+  
+  <ul>
+    <li><b>Python 3.9+</b></li>
+    <li><b>Pygame 2.0+</b></li>
+  </ul>
+  
+  <p>
+    The following modules are included with Python and require <b><i>no installation</i></b>:
+    <code>sys</code>, <code>math</code>, <code>subprocess</code>, <code>time</code>, <code>random</code>.
+  </p>
+  
+  <p><b>how to play :</b></p>
+  <p>in a <i>bash command prompt</i>, paste these following lines :</p>
+  <pre>
+    git clone https://github.com/moi-mimil/Treeboom.git
+    cd Treeboom
+    pip install pygame
+    python treeboom.py
+  </pre>
 </div>
 <hr />
 <div align="center">
