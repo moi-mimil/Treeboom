@@ -15,7 +15,7 @@ pygame.display.set_caption("treeboom")
 clock = pygame.time.Clock()
 
 # load the background image
-image1 = pygame.image.load("/assets/images/menu-img-2.png")
+image1 = pygame.image.load("assets/images/menu-img-2.png")
 image1 = pygame.transform.scale(image1, (WIDTH, HEIGHT))
 
 # clickable rectangle zones
