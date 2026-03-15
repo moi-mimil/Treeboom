@@ -223,7 +223,7 @@ dist_max_point = 40
 rayon_point = 8
 
 # enemy variables
-anti = pygame.image.load("/assets/images/anti-milo.png")
+anti = pygame.image.load("assets/images/anti-milo.png")
 anti = pygame.transform.scale(anti, (80, 60))
 e_x =550
 e_y =800
