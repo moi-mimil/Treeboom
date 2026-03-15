@@ -116,10 +116,10 @@ co2 = 1
 ran = True # for enemy respawn
 
 # initial background
-background0 = pygame.image.load("/assets/images/background-grey0.png")
-background1 = pygame.image.load("/assets/images/background-grey1.png")
-background2 = pygame.image.load("/assets/images/background-grey2.png")
-background3 = pygame.image.load("/assets/images/background-grey3.png")
+background0 = pygame.image.load("assets/images/background-grey0.png")
+background1 = pygame.image.load("assets/images/background-grey1.png")
+background2 = pygame.image.load("assets/images/background-grey2.png")
+background3 = pygame.image.load("assets/images/background-grey3.png")
 current_back = background0
 
 
