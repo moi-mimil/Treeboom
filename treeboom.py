@@ -56,16 +56,16 @@ ecran = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Déplacements et tir")
 
 # load and resize images
-miku_img = pygame.image.load("/assets/images/miku1-no-w.png")
-smol_tree = pygame.image.load("/assets/images/smol-tree.png")
-big_tree = pygame.image.load("/assets/images/big-tree.png")
-mid_tree = pygame.image.load("/assets/images/mid-tree.png")
-damazon_down = pygame.image.load("/assets/images/damazon-down.png")
-damazon_up = pygame.image.load("/assets/images/damazon-up.png")
-damazon_right = pygame.image.load("/assets/images/damazon-right.png")
-damazon_left = pygame.image.load("/assets/images/damazon-left.png")
+miku_img = pygame.image.load("assets/images/miku1-no-w.png")
+smol_tree = pygame.image.load("assets/images/smol-tree.png")
+big_tree = pygame.image.load("assets/images/big-tree.png")
+mid_tree = pygame.image.load("assets/images/mid-tree.png")
+damazon_down = pygame.image.load("assets/images/damazon-down.png")
+damazon_up = pygame.image.load("assets/images/damazon-up.png")
+damazon_right = pygame.image.load("/ssets/images/damazon-right.png")
+damazon_left = pygame.image.load("assets/images/damazon-left.png")
 damazon = damazon_down
-dead = pygame.image.load("/assets/images/dead-antimilo.png")
+dead = pygame.image.load("assets/images/dead-antimilo.png")
 
 # font settings
 font = pygame.font.Font("04b_25__.ttf", 30)
