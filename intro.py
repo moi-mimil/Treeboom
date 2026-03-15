@@ -40,7 +40,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Load and resize an image
-image1 = pygame.image.load("/assets/images/menu-img-2.png")
+image1 = pygame.image.load("assets/images/menu-img-2.png")
 image1 = pygame.transform.scale(image1, (WIDTH, HEIGHT))
 
 # Game variables
